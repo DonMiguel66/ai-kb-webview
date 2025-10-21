@@ -1,25 +1,19 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { MainContainer, ChatContainer, MessageList, Message, MessageInput } from '@chatscope/chat-ui-kit-react';
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+function App() {  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const sendMessage = async () => {    if (!input.trim()) return;
+    const userMessage = { message: input, sentTime: new Date().toISOString(), direction: 'outgoing', sender: 'user' };
+    setMessages([...messages, userMessage]);
+    try {      const response = await axios.post('https://your-api.com/search', { query: input }, {        headers: { 'Content-Type': 'application/json' }      });      const botMessage = { message: response.data.answer || 'Нет ответа от API', sentTime: new Date().toISOString(), direction: 'incoming', sender: 'bot' };
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {      console.error('API error:', error);
+      const errorMessage = { message: 'Ошибка API: ' + error.message, sentTime: new Date().toISOString(), direction: 'incoming', sender: 'bot' };
+      setMessages(prev => [...prev, errorMessage]);
+    }    setInput('');  };
+  return (    <div className="container mt-3">      <MainContainer>        <ChatContainer>          <MessageList>            {messages.map((msg, i) => (              <Message key={i} model={{                message: msg.message,                direction: msg.direction,                sender: msg.sender,                sentTime: msg.sentTime              }} />            ))}          </MessageList>          <MessageInput            placeholder="Введите сообщение..."            value={input}            onChange={val => setInput(val)}            onSend={sendMessage}            attachButton={false}          />        </ChatContainer>      </MainContainer>    </div>  );
+}export default App;

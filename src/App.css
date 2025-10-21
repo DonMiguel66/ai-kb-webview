@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,7 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
+.message-list {  height: 400px;  overflow-y: auto;}
+.message-list::-webkit-scrollbar {  width: 8px;}
+.message-list::-webkit-scrollbar-thumb {  background: #888;  border-radius: 4px;}
