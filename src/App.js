@@ -5,7 +5,8 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {  
+function App() 
+{  
   const [messages, setMessages] = useState([]);
   const [documents, setDocuments] = useState([]); // Для списка документов
   const [status, setStatus] = useState(''); // Для отчета генерации
@@ -99,7 +100,6 @@ function App() {
         clearInterval(interval);
       }
   }, 5000);
-
 
   };  
   return (  
